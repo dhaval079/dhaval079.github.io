@@ -96,28 +96,43 @@
                 <img src="cloud1.png" alt="Dockerfile" width="700">
 
                 <p>The Dockerfile is used to build the Docker image for our application. Below is the content of our Dockerfile:</p>
-                <pre><code>FROM node:15
+                <pre><code>
                 <img src="cloud2.png" alt="Dockerfile" width="700">
+                FROM node:15
+                WORKDIR /app
+                COPY package.json  .
+                RUN npm install
+                RUN npm i nodemon
+                COPY . ./
+                EXPOSE 5506
+                CMD ["node","index3.js"]
 
-WORKDIR /app
-COPY package.json ./
-RUN npm install
-COPY . .
-EXPOSE 8000
-CMD ["node", "index.js"]</code></pre>
+                </code></pre>
                 <p>This Dockerfile sets up a Node.js environment, copies the package.json file, installs dependencies, copies the application code, exposes port 8000, and specifies the command to run the application.</p>
                 <h3>Docker Compose</h3>
                 <p>Docker Compose is used to define and run multi-container Docker applications. Below is the content of our docker-compose.yml file:</p>
-                <pre><code>version: '3'
-services:
-  core-algo:
-    build: .
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
-    environment:
-      - NODE_ENV=development</code></pre>
+                <pre><code>version: '3.9'
+
+                services:
+                  roundrobin:
+                    build: ./1_Roundrobin
+                    ports: 
+                      - "8001:8000"
+                
+                  banker:
+                    build: ./2_Bankers-Algorithm-Js-main1
+                    ports: 
+                      - "8002:5000"
+                
+                  disk:
+                    build: ./3_Disk
+                    ports: 
+                      - "8003:5505"
+                 
+                  mru:
+                    build: ./4_MRU
+                    ports: 
+                    - "8004:5506"</code></pre>
                 <p>This Docker Compose file defines a service named core-algo, specifies the build context, maps port 8000 on the host to port 8000 in the container, mounts the current directory as a volume to the /app directory in the container, and sets the NODE_ENV environment variable to development.</p>
                 <!-- Docker
 
